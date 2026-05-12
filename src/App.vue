@@ -6,10 +6,6 @@ import { computed } from 'vue'
 
 const route = useRoute()
 
-// Decide if we should show navs. 
-// User said "every page", but usually auth pages are excluded.
-// However, I will show them everywhere as requested "ทุกไฟล์ๆๆๆ"
-// unless I detect it looks broken.
 const showNav = computed(() => {
   // If you want to exclude auth pages, you can uncomment the line below:
   // return !route.path.startsWith('/auth')

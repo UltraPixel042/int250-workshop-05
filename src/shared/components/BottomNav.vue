@@ -1,19 +1,28 @@
 <script setup>
 import { Home, Stethoscope, Pill, Ambulance, User } from 'lucide-vue-next'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
 const navItems = [
   { id: "home", label: "Home", icon: Home, route: "/" },
   { id: "doctors", label: "Doctors", icon: Stethoscope, route: "/doctor" },
   { id: "medicine", label: "Medicine", icon: Pill, route: "/medical" },
-  { id: "ambulance", label: "Ambulance", icon: Ambulance, route: "/medical" },
-  { id: "profile", label: "Profile", icon: User, route: "/medical" },
+  { id: "ambulance", label: "Ambulance", icon: Ambulance, route: "/ambulance" },
+  { id: "profile", label: "Profile", icon: User, route: "/profile" },
 ];
 
 const activeTab = ref("home");
+
+// Sync active tab with current route
+watch(() => route.path, (path) => {
+  const activeItem = navItems.find(item => item.route === path)
+  if (activeItem) {
+    activeTab.value = activeItem.id
+  }
+}, { immediate: true })
 
 const navigate = (item) => {
   activeTab.value = item.id

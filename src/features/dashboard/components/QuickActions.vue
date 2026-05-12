@@ -34,7 +34,7 @@ const actions = [
     iconColor: "text-emergency",
     hoverBg: "hover:bg-emergency/15",
     highlight: true,
-    route: "/medical"
+    route: "/ambulance"
   },
   {
     id: "records",
