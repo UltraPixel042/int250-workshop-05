@@ -1,16 +1,24 @@
 <script setup>
 import { Home, Stethoscope, Pill, Ambulance, User } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const navItems = [
-  { id: "home", label: "Home", icon: Home },
-  { id: "doctors", label: "Doctors", icon: Stethoscope },
-  { id: "medicine", label: "Medicine", icon: Pill },
-  { id: "ambulance", label: "Ambulance", icon: Ambulance },
-  { id: "profile", label: "Profile", icon: User },
+  { id: "home", label: "Home", icon: Home, route: "/" },
+  { id: "doctors", label: "Doctors", icon: Stethoscope, route: "/doctor" },
+  { id: "medicine", label: "Medicine", icon: Pill, route: "/medical" },
+  { id: "ambulance", label: "Ambulance", icon: Ambulance, route: "/medical" },
+  { id: "profile", label: "Profile", icon: User, route: "/medical" },
 ];
 
 const activeTab = ref("home");
+
+const navigate = (item) => {
+  activeTab.value = item.id
+  if (item.route) router.push(item.route)
+}
 </script>
 
 <template>
@@ -23,7 +31,7 @@ const activeTab = ref("home");
       <button
         v-for="item in navItems"
         :key="item.id"
-        @click="activeTab = item.id"
+        @click="navigate(item)"
         class="flex flex-1 flex-col items-center gap-1 py-2 transition-colors"
         :class="[
           activeTab === item.id

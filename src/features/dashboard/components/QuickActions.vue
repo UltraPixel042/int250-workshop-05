@@ -3,6 +3,10 @@ import { Stethoscope, Pill, Ambulance, FolderOpen } from 'lucide-vue-next'
 import Card from '@/shared/components/ui/Card.vue'
 import CardContent from '@/shared/components/ui/CardContent.vue'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const actions = [
   {
     id: "consult",
@@ -11,6 +15,7 @@ const actions = [
     bgColor: "bg-primary/10",
     iconColor: "text-primary",
     hoverBg: "hover:bg-primary/15",
+    route: "/doctor"
   },
   {
     id: "medicine",
@@ -19,6 +24,7 @@ const actions = [
     bgColor: "bg-success/10",
     iconColor: "text-success",
     hoverBg: "hover:bg-success/15",
+    route: "/medical"
   },
   {
     id: "ambulance",
@@ -28,6 +34,7 @@ const actions = [
     iconColor: "text-emergency",
     hoverBg: "hover:bg-emergency/15",
     highlight: true,
+    route: "/medical"
   },
   {
     id: "records",
@@ -36,8 +43,13 @@ const actions = [
     bgColor: "bg-accent",
     iconColor: "text-accent-foreground",
     hoverBg: "hover:bg-accent/80",
+    route: "/medical"
   },
 ];
+
+const navigate = (route) => {
+  if (route) router.push(route)
+}
 </script>
 
 <template>
@@ -49,6 +61,7 @@ const actions = [
       <Card
         v-for="action in actions"
         :key="action.id"
+        @click="navigate(action.route)"
         class="cursor-pointer border-0 shadow-sm transition-all duration-200"
         :class="[action.hoverBg, action.highlight ? 'ring-2 ring-emergency/30 hover:ring-emergency/50' : '']"
       >

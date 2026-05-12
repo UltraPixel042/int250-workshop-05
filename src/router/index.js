@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import dashboardRoutes from '@/features/dashboard/routes'
+import authRoutes from '@/features/auth/routes'
 
 const routes = [
-  ...dashboardRoutes
+  ...dashboardRoutes,
+  ...authRoutes
 ]
 
 const router = createRouter({
@@ -10,13 +12,17 @@ const router = createRouter({
   routes
 })
 
-// Authentication Guard according to README.md
+// Global Authentication Guard
 router.beforeEach((to, from, next) => {
-  const isAdminRoute = to.path.startsWith('/admin')
-  const isAuthenticated = false // Placeholder for auth logic
+  const isPublicRoute = to.path.startsWith('/auth')
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
-  if (isAdminRoute && !isAuthenticated && to.path !== '/admin/sign-in') {
-    next('/admin/sign-in')
+  if (!isPublicRoute && !isAuthenticated) {
+    // Redirect to Auth Gate if not logged in
+    next('/auth/gate')
+  } else if (isPublicRoute && isAuthenticated && (to.path === '/auth/sign-in' || to.path === '/auth/gate')) {
+    // Redirect to home if already logged in and trying to access login pages
+    next('/')
   } else {
     next()
   }
