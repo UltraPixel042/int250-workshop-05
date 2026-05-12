@@ -5,6 +5,7 @@ import doctorRoutes from '@/features/doctor/routes'
 import medicalRoutes from '@/features/medical/routes'
 import ambulanceRoutes from '@/features/ambulance/routes'
 import profileRoutes from '@/features/profile/routes'
+import testRoutes from '@/features/test/routes'
 
 const routes = [
   ...dashboardRoutes,
@@ -12,7 +13,8 @@ const routes = [
   ...doctorRoutes,
   ...medicalRoutes,
   ...ambulanceRoutes,
-  ...profileRoutes
+  ...profileRoutes,
+  ...testRoutes
 ]
 
 const router = createRouter({
