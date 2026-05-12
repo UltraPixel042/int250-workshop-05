@@ -55,10 +55,10 @@ const goToPrevStep = () => {
 
     <div class="w-full py-8 px-2 bg-white border-b border-gray-100 shadow-sm overflow-hidden">
       <div class="flex items-center justify-between w-full max-w-lg mx-auto relative px-4">
-        <div class="absolute top-4 left-6 right-6 h-1 bg-gray-100 rounded-full -z-0"></div>
+        <div class="absolute top-4 left-6 right-6 h-1 bg-gray-100 rounded-full"></div>
         
         <div 
-          class="absolute top-4 left-6 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out -z-0"
+          class="absolute top-4 left-6 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out"
           :style="{ width: `calc(${((currentStep - 1) / (steps.length - 1)) * 100}% - 2rem)` }"
         ></div>
 
@@ -87,7 +87,7 @@ const goToPrevStep = () => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-6 p-5 mt-4 text-black min-h-[400px]">
+    <div class="flex flex-col gap-6 p-5 mt-4 text-black min-h-100">
       
       <div v-if="currentStep === 1" class="flex flex-col gap-6 animate-fade-in">
         <div class="flex flex-col justify-center items-center gap-5 border border-[#F4D3D4] rounded-2xl px-5 py-8 bg-white shadow-sm">

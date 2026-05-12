@@ -41,7 +41,7 @@ const navigate = (item) => {
         v-for="item in navItems"
         :key="item.id"
         @click="navigate(item)"
-        class="flex flex-1 flex-col items-center gap-1 py-2 transition-colors"
+        class="flex flex-1 flex-col items-center gap-1 py-2 transition-colors cursor-pointer"
         :class="[
           activeTab === item.id
             ? item.id === 'ambulance'
