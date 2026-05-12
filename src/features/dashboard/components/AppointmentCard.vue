@@ -8,6 +8,7 @@ import Card from '@/shared/components/ui/Card.vue'
 import CardContent from '@/shared/components/ui/CardContent.vue'
 import CardHeader from '@/shared/components/ui/CardHeader.vue'
 import CardTitle from '@/shared/components/ui/CardTitle.vue'
+import doctorAvatar from '@/assets/doctor-avartar.png'
 </script>
 
 <template>
@@ -27,10 +28,7 @@ import CardTitle from '@/shared/components/ui/CardTitle.vue'
       <CardContent class="pb-4">
         <div class="flex items-center gap-3 mb-4">
           <Avatar class="h-14 w-14 border-2 border-primary-foreground/20">
-            <AvatarImage src="/doctor-avatar.jpg" alt="Dr. Sarah Mitchell" />
-            <AvatarFallback class="bg-primary-foreground/10 text-primary-foreground font-semibold">
-              SM
-            </AvatarFallback>
+            <AvatarImage :src="doctorAvatar" alt="Dr. Sarah Mitchell" />
           </Avatar>
           <div>
             <h3 class="font-semibold text-primary-foreground">

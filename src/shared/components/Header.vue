@@ -1,7 +1,6 @@
 <script setup>
 import { Bell } from 'lucide-vue-next'
 import Avatar from '@/shared/components/ui/Avatar.vue'
-import AvatarFallback from '@/shared/components/ui/AvatarFallback.vue'
 import AvatarImage from '@/shared/components/ui/AvatarImage.vue'
 import Button from '@/shared/components/ui/Button.vue'
 import avatarUrl from '@/assets/avartar.png'
