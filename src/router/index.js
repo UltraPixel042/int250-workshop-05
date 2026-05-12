@@ -17,6 +17,10 @@ router.beforeEach((to, from, next) => {
   const isPublicRoute = to.path.startsWith('/auth')
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
 
+  // Set Document Title
+  const title = to.name ? to.name.charAt(0).toUpperCase() + to.name.slice(1) : 'CureX'
+  document.title = `${title} | CureX`
+
   if (!isPublicRoute && !isAuthenticated) {
     // Redirect to Auth Gate if not logged in
     next('/auth/gate')

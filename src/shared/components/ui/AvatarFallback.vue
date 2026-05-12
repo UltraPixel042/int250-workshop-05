@@ -13,7 +13,7 @@ const cn = (...inputs) => twMerge(clsx(inputs))
 </script>
 
 <template>
-  <div :class="cn('flex h-full w-full items-center justify-center rounded-full bg-muted', props.class)">
+  <div :class="cn('absolute inset-0 flex h-full w-full items-center justify-center rounded-full bg-muted', props.class)">
     <slot />
   </div>
 </template>
