@@ -1,90 +1,98 @@
-# โปรเจกต์ Vue 3 ที่ใช้สถาปัตยกรรมแบบ Feature-Based
+# Software Architecture & Design Pattern Guideline: Feature-Based Architecture
 
-โปรเจกต์นี้สร้างขึ้นโดยใช้ Vue 3, Vite, Tailwind CSS และ Vue Router
-โดยมีการบังคับใช้ **Feature-Based Architecture** เพื่อ Scalability, Maintainability, Team Collaboration
-ที่ดี
+เอกสารฉบับนี้อธิบายถึงสถาปัตยกรรมซอฟต์แวร์และรูปแบบการออกแบบ (Design Patterns) ที่ใช้ในโปรเจกต์นี้ เพื่อเป็นมาตรฐานสำหรับการพัฒนาแอปพลิเคชันที่มีความยืดหยุ่น (Scalability), บำรุงรักษาง่าย (Maintainability) และรองรับการทำงานร่วมกันเป็นทีมขนาดใหญ่
 
-## แนวทางของสถาปัตยกรรม
+---
 
-แทนที่จะจัดกลุ่มไฟล์ตามประเภทของไฟล์ โปรเจกต์นี้จะจัดระเบียบโค้ดตาม **Feature/Domain**
+## 1. Architectural Pattern: Feature-Based Architecture (FBA)
 
-### โครงสร้างไดเรกทอรีมาตรฐาน (Standard Directory Structure)
+หัวใจหลักของสถาปัตยกรรมนี้คือการจัดกลุ่มโค้ดตาม **Business Domain** หรือ **Feature** แทนที่จะจัดกลุ่มตามประเภทของไฟล์ (เช่น การแยกโฟลเดอร์ components, views, store ออกจากกันทั้งหมด)
 
-โครงสร้างของโปรเจกต์จะแบ่งแยกอย่างชัดเจนระหว่าง **Features** และ **Shared**
+### แนวคิดหลัก (Core Concepts)
+- **Modularization**: แบ่งแอปพลิเคชันออกเป็นโมดูลอิสระ (Features) ที่สามารถทำงานได้ด้วยตัวเอง
+- **High Cohesion**: สิ่งที่ทำงานร่วมกันหรือเกี่ยวข้องกันในเชิงธุรกิจควรอยู่ใกล้กัน
+- **Low Coupling**: ลดความผูกพันระหว่างโมดูลให้น้อยที่สุด เพื่อให้การเปลี่ยนแปลงในฟีเจอร์หนึ่งไม่ส่งผลกระทบต่อฟีเจอร์อื่น
 
-```
+---
+
+## 2. โครงสร้างไดเรกทอรีมาตรฐาน (Standard Directory Structure)
+
+โครงสร้างถูกแบ่งออกเป็น 2 ส่วนหลักคือ **Features** และ **Shared**
+
+```text
 src/
-├── features/ # พื้นที่สำหรับ Business Domains (แต่ละฟีเจอร์แยกขาดจากกัน)
-│ └── <feature-name>/ # โครงสร้างมาตรฐานเมื่อมีการสร้างฟีเจอร์ใหม่
-│ ├──── components/ # UI Components ที่ใช้ "เฉพาะ" ในฟีเจอร์นี้เท่านั้น (Dumb components)
-│ ├──── pages/ # หน้าจอหลักของฟีเจอร์นี้ที่จะถูกเรียกผ่าน Router (Smart components)
-│ ├──── composables/ # Vue Composables/Logic เฉพาะของฟีเจอร์นี้ (ถ้ามี)
-│ ├──── services/ # ไฟล์จัดการ API / การดึงข้อมูลของโดเมนนี้ (ถ้ามี)
-│ ├──── stores/ # State Management (Pinia) ของฟีเจอร์นี้ (ถ้ามี)
-│ └──── routes.js # ไฟล์กำหนดเส้นทาง (Routes config) ของฟีเจอร์นี้
+├── features/               # โมดูลที่บรรจุ Business Logic เฉพาะทาง
+│   └── <feature-name>/     # ชื่อโมดูลตาม Business Domain
+│       ├── components/     # UI Components ที่ใช้เฉพาะในฟีเจอร์นี้ (Private Components)
+│       ├── pages/          # หน้าจอหลัก (Entry Points) ของฟีเจอร์
+│       ├── composables/    # Logic หรือ State เฉพาะของฟีเจอร์ (Logic Encapsulation)
+│       ├── services/       # การจัดการ API หรือการดึงข้อมูลเฉพาะโดเมน
+│       └── routes.js       # การกำหนดเส้นทางภายในโมดูล (Decentralized Routing)
 │
-├── shared/ # พื้นที่สำหรับส่วนกลางที่ใช้ร่วมกันทั่วทั้งแอปพลิเคชัน
-│ ├── components/ # Shared UI (เช่น Navbar, Button, BaseModal)
-│ ├── composables/ # Shared Logic (เช่น useAuth, useTheme)
-│ └── utils/ # Helper functions กลาาง (เช่น การแปลงวันที่, format ตัวเลข)
+├── shared/                 # ทรัพยากรส่วนกลางที่ใช้ร่วมกันทั้งระบบ
+│   ├── components/         # Shared UI (เช่น Navbar, Sidebar, Base Components)
+│   ├── composables/        # Shared Logic (เช่น useAuth, useTheme)
+│   ├── utils/              # Helper functions ทั่วไป
+│   └── assets/             # Global CSS, Images, Fonts
 │
-├── router/
-│ └── index.js # Main Router (ทำหน้าที่รวม routes.js จากทุกฟีเจอร์ และจัดการ Guards)
-├── App.vue
-└── main.js
-
+├── router/                 # จุดรวมการจัดการเส้นทาง (Centralized Router)
+├── App.vue                 # Root Layout และจุดรวมของ Main UI Frame
+└── main.js                 # Entry point ของแอปพลิเคชัน
 ```
 
-### การสื่อสารข้ามฟีเจอร์และ Shared UI (UI ที่ใช้ร่วมกัน)
+---
 
-- **Shared UI:** component(s) ใด ๆ ก็ตามที่ใช้ร่วมกันในหลายฟีเจอร์ (เช่น `Navbar.vue`, Button, Layout) จะต้องอยู่ในโฟลเดอร์ `src/shared/components/` ห้าม component(s) ที่ใช้ร่วมกันไปใส่ไว้ใน `features`
-- **Direction Of Dependency:** ในทางอุดมคติ แต่ละฟีเจอร์ใน `src/features` ควรเป็นอิสระจากกัน หาก `Feature A` ต้องใช้คอมโพเนนต์จาก `Feature B` ให้ย้ายคอมโพเนนต์นั้นไปไว้ที่ระกับ `shared/` แทน
-- **State & Events:** ใช้ Pinia หรือ Global event buses สำหรับ State ข้าม feature ในกรณีที่หลีกเลี่ยงการผูกติด (Coupling) กันไม่ได้
+## 3. กฎการจัดการความพึ่งพา (Dependency Rules)
 
-## Tailwind CSS
+เพื่อให้สถาปัตยกรรมมีความแข็งแกร่ง ต้องปฏิบัติตามกฎดังนี้:
 
-โปรเจกต์นี้ใช้ `@tailwindcss/vite` (Tailwind CSS v4)
-โฟกัสหลักของ CSS จะฉีดเข้าไปที่ `src/assets/main.css`
+1.  **Unidirectional Dependency**: 
+    - `Features` สามารถเรียกใช้ `Shared` ได้
+    - `Shared` **ห้าม** เรียกใช้ `Features` โดยเด็ดขาด
+2.  **Feature Isolation**:
+    - `Feature A` ไม่ควรนำเข้า (Import) สิ่งต่าง ๆ จาก `Feature B` โดยตรง
+    - หากมีความจำเป็นต้องใช้คอมโพเนนต์ร่วมกัน ให้ย้ายคอมโพเนนต์นั้นไปอยู่ที่ `shared/components/` แทน
+3.  **Global Access**: 
+    - ทรัพยากรที่อยู่ใน `shared/` ต้องเป็นทรัพยากรที่เป็นกลาง (Context-free) และไม่ผูกติดกับ Business Logic ของฟีเจอร์ใดฟีเจอร์หนึ่ง
 
-## ระบบ Routing & การตรวจสอบสิทธิ์ (Routing & Authentication Guard)
+---
 
-แอปพลิเคชันถูกแบ่งออกเป็นสองส่วนหลัก:
+## 4. Design Pattern: Smart and Dumb Components
 
-1. **Public / User Routes:**
-   เส้นทางใดก็ตามที่ **ไม่ได้** ขึ้นต้นด้วย `/admin` (เช่น `/`, `/profile`) จะถือว่า Public และสามารถเข้าถึงได้โดยไม่ต้องเข้าสู่ระบบ
+เราใช้รูปแบบการแยกความรับผิดชอบของคอมโพเนนต์ออกเป็นสองระดับ:
 
-2. **Protected / Admin Routes:**
-   เส้นทางใดก็ตามที่ **ขึ้นต้น** ด้วย `/admin` (เช่น `/admin`, `/admin/job`) จะต้อง Authentication
+### Dumb Components (Presentational)
+- อยู่ในโฟลเดอร์ `components/`
+- มีหน้าที่แสดงผล UI เท่านั้น รับข้อมูลผ่าน `props` และส่งเหตุการณ์ออกไปผ่าน `emit`
+- **ห้าม** มี Logic ที่ซับซ้อน หรือการเรียกใช้ API โดยตรง
 
-**การทำงานของ Router Guard:**
-จะมี guard logic ไว้ใน `vue-router` โดยจะดักจับ path ดังกล่าว:
+### Smart Components (Containers / Pages)
+- อยู่ในโฟลเดอร์ `pages/`
+- ทำหน้าที่เป็นตัวเชื่อม (Orchestrator) ระหว่าง Business Logic, State และ UI
+- จัดการการเรียกใช้ API, การเข้าถึง Store และการส่งต่อข้อมูลให้ Dumb Components
 
-- หากผู้ใช้ยังไม่ได้ Authen และพยายามเข้าถึงหน้า `/admin...` ใด ๆ (ยกเว้น `/admin/sign-in`) ระบบจะ redirect ไปยังหน้า `/admin/sign-in`
-- หากอยู่ในส่วน Public Routes ผู้ใช้จะสามารถดู content ได้ปกติ
+---
 
-## Branch & PR Naming (Mandatory)
+## 5. การจัดการเส้นทาง (Routing Strategy)
 
-**Branch:**
+ใช้ระบบ **Decentralized Routes** เพื่อให้แต่ละฟีเจอร์เป็นอิสระ:
+- แต่ละฟีเจอร์จะมีไฟล์ `routes.js` ของตัวเอง
+- ไฟล์ `src/router/index.js` จะทำหน้าที่เป็น **Aggregator** เพื่อรวมเส้นทางจากทุกฟีเจอร์เข้าด้วยกัน
+- วิธีนี้ช่วยลดความขัดแย้ง (Merge Conflicts) เมื่อพัฒนาหลายฟีเจอร์พร้อมกัน
 
-`<type>/<short-description-job-case>`
+---
 
-Types:
+## 6. Authentication & Authorization Pattern (Guard)
 
-- `feat`: ใช้เมื่อเพิ่มฟีเจอร์หรือความสามารถใหม่
-- `fix`: ใช้เมื่อแก้ไขบั๊ก (Bug) หรือข้อผิดพลาดในโค้ด
-- `refactor`: ใช้เมื่อมีการปรับปรุงโครงสร้างโค้ดหรือประสิทธิภาพการทำงาน (โดยไม่เปลี่ยนพฤติกรรมของระบบ)
-- `doc`: ใช้เมื่อมีการปรับปรุงเอกสารเท่านั้น เช่น การแก้ไข README.md หรือไฟล์ .txt
-- `test`: ใช้เมื่อต้องการเพิ่มหรือแก้ไขสคริปต์การทดสอบ (Tests)
-- `hotfix`: ใช้สำหรับแก้ไขปัญหาเร่งด่วนและวิกฤตที่ต้อง Deploy ขึ้น Production ในทันที
+ใช้รูปแบบ **Global Navigation Guard** เพื่อควบคุมการเข้าถึงทรัพยากร:
+- แบ่งหน้าจอเป็น 2 กลุ่มใหญ่: **Public Routes** และ **Protected Routes**
+- มีการใช้ระบบ **Gatekeeper** (Middleware) เพื่อตรวจสอบสถานะการยืนยันตัวตนก่อนการเรนเดอร์คอมโพเนนต์
+- หากผู้ใช้ไม่มีสิทธิ์ จะถูก Redirect ไปยังโมดูลการยืนยันตัวตน (Auth Module) โดยอัตโนมัติ
 
-**การตั้งชื่อ PR (Pull Request):**
+---
 
-`<branch-name> - [JIRA Work Key] <short description>`
-
-**Normal Workflow**
-
-1. **ข้อห้ามสำคัญ:** **ห้าม Push โค้ดตรง ไปยัง Branch `main` และ `develop` โดยเด็ดขาด!**
-2. เริ่มการพัฒนาโปรเจกต์โดยแตก Branch ใหม่จาก `main` ด้วย branch name ที่เหมาะสม เช่น `feat/example-feature`
-3. เมื่อพัฒนาเสร็จสิ้น ให้สร้าง Pull Request (PR) ไปยัง Branch ขาเข้าคือ `develop`
-4. เมื่อโค้ดใน `develop` เสถียรและพร้อมสำหรับ Production ให้สร้าง PR จาก `develop` ไปยัง Branch `main`
-5. **ข้อกำหนดฝั่ง Vercel Deploy:** การกดปุ่ม **Merge PR** เข้าสู่ `main` ต้องกระทำโดยบัญชี `navysingchai` เท่านั้น! หากเป็นบัญชีอื่นกด Merge ระบบ Vercel จะไม่ทำการ Deploy ให้อัตโนมัติ
+## 7. ประโยชน์ของสถาปัตยกรรมนี้
+- **Scalability**: สามารถเพิ่มฟีเจอร์ใหม่ได้ง่ายเพียงแค่เพิ่มโฟลเดอร์ใน `features/`
+- **Maintainability**: เมื่อเกิดข้อผิดพลาดในฟีเจอร์ใด สามารถจำกัดขอบเขตการแก้ไขได้ชัดเจน
+- **Testing**: ง่ายต่อการทำ Unit Test และ Integration Test เนื่องจากแต่ละฟีเจอร์มีขอบเขต (Boundary) ที่ชัดเจน
+- **Onboarding**: นักพัฒนาใหม่สามารถเข้าใจระบบได้เร็วขึ้นจากการดูตาม Business Domain

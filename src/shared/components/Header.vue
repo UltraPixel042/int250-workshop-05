@@ -4,16 +4,14 @@ import Avatar from '@/shared/components/ui/Avatar.vue'
 import AvatarFallback from '@/shared/components/ui/AvatarFallback.vue'
 import AvatarImage from '@/shared/components/ui/AvatarImage.vue'
 import Button from '@/shared/components/ui/Button.vue'
+import avatarUrl from '@/assets/avartar.png'
 </script>
 
 <template>
-  <header class="flex items-center justify-between px-4 py-4">
+  <header class="mx-auto max-w-md flex items-center justify-between px-4 py-4">
     <div class="flex items-center gap-3">
       <Avatar class="h-12 w-12 border-2 border-primary/20">
-        <AvatarImage src="/placeholder-avatar.jpg" alt="User avatar" />
-        <AvatarFallback class="bg-primary/10 text-primary font-semibold">
-          JD
-        </AvatarFallback>
+        <AvatarImage :src="avatarUrl" alt="User avatar" />
       </Avatar>
       <div>
         <p class="text-sm text-muted-foreground">Good Morning</p>
