@@ -62,7 +62,7 @@ const goToPrevStep = () => {
         <div class="absolute top-4 left-6 right-6 h-1 bg-gray-100 rounded-full"></div>
         
         <div 
-          class="absolute top-4 left-6 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out"
+          class="absolute top-4 left-8 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out"
           :style="{ width: `calc(${((currentStep - 1) / (steps.length - 1)) * 100}% - 2rem)` }"
         ></div>
 
