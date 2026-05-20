@@ -96,3 +96,11 @@ src/
 - **Maintainability**: เมื่อเกิดข้อผิดพลาดในฟีเจอร์ใด สามารถจำกัดขอบเขตการแก้ไขได้ชัดเจน
 - **Testing**: ง่ายต่อการทำ Unit Test และ Integration Test เนื่องจากแต่ละฟีเจอร์มีขอบเขต (Boundary) ที่ชัดเจน
 - **Onboarding**: นักพัฒนาใหม่สามารถเข้าใจระบบได้เร็วขึ้นจากการดูตาม Business Domain
+
+## สมาชิกและหน้าที่ในทีม
+
+| สมาชิก | GitHub | หน้าที่ |
+|--------|--------|---------|
+| navysingchai | [@navysingchai](https://github.com/navysingchai) | Frontend Dev — พัฒนาหน้า Profile, Doctor, ดูเรื่อง Software Design Pattern, Navbar, Footer |
+| Wannawat Siriarkanay | [@UltraPixel042](https://github.com/UltraPixel042) | Frontend Dev — พัฒนาหน้า Ambulance, Doctor |
+| Thanawat | [@Tob-2](https://github.com/Tob-2) | Frontend Dev — พัฒนาหน้า Medicine, Doctor |

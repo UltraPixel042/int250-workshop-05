@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import SelectLocation from "../components/SelectLocation.vue";
+import AvailableAmbulance from "../components/AvailableAmbulance.vue";
+import ChooseAmbulnace from "../components/ChooseAmbulnace.vue";
+import CallAmbulance from "../components/CallAmbulance.vue";
 
 // Set the current step state, starting at 1
 const currentStep = ref(1);
@@ -58,7 +62,7 @@ const goToPrevStep = () => {
         <div class="absolute top-4 left-6 right-6 h-1 bg-gray-100 rounded-full"></div>
         
         <div 
-          class="absolute top-4 left-6 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out"
+          class="absolute top-4 left-8 h-1 bg-[#CA242A] rounded-full transition-all duration-500 ease-in-out"
           :style="{ width: `calc(${((currentStep - 1) / (steps.length - 1)) * 100}% - 2rem)` }"
         ></div>
 
@@ -87,8 +91,10 @@ const goToPrevStep = () => {
         </div>
       </div>
     </div>
+
     <div class="flex flex-col gap-6 p-5 mt-4 text-black min-h-100">
       
+      <!-- Step 1: Home / Start -->
       <div v-if="currentStep === 1" class="flex flex-col gap-6 animate-fade-in">
         <div class="flex flex-col justify-center items-center gap-5 border border-[#F4D3D4] rounded-2xl px-5 py-8 bg-white shadow-sm">
           <div class="rounded-full text-[#CA242A] p-6 bg-[#F9E9E9] w-fit shadow-inner">
@@ -100,72 +106,38 @@ const goToPrevStep = () => {
             <h2 class="text-xl font-extrabold text-gray-800 mb-2">Need an Ambulance?</h2>
             <p class="text-gray-500 text-sm leading-relaxed">We'll help you find the nearest available ambulance and connect you.</p>
           </div>
-          <button @click="goToNextStep" class="mt-2 flex justify-center items-center gap-3 bg-[#CA242A] text-white px-8 py-4 w-full rounded-xl text-lg font-bold shadow-lg shadow-red-200 active:scale-95 transition-transform">
+          <button @click="goToNextStep" class="mt-2 flex justify-center items-center gap-3 bg-[#CA242A] text-white px-8 py-4 w-full rounded-xl text-lg font-bold shadow-lg shadow-red-200 active:scale-95 transition-transform cursor-pointer hover:bg-red-600">
             Start Request
           </button>
         </div>
       </div>
 
-      <div v-else-if="currentStep === 2" class="flex flex-col gap-6 animate-fade-in bg-gray-50 p-6 rounded-2xl border border-gray-100">
-         <div class="text-center mb-2">
-            <h2 class="text-xl font-extrabold text-gray-800">Select Location</h2>
-         </div>
-         <div class="w-full h-40 bg-blue-100 rounded-xl flex items-center justify-center border-2 border-dashed border-blue-300 text-blue-500 font-bold">
-            [ Map Area - Pin Location ]
-         </div>
-         <div class="flex gap-3 mt-4">
-            <button @click="goToPrevStep" class="flex-1 py-3 text-gray-600 bg-white border border-gray-300 rounded-xl font-bold active:scale-95">Back</button>
-            <button @click="goToNextStep" class="flex-1 py-3 text-white bg-[#CA242A] rounded-xl font-bold active:scale-95">Confirm</button>
-         </div>
-      </div>
+      <!-- Step 2: Select Location -->
+      <SelectLocation
+        v-else-if="currentStep === 2"
+        @next="goToNextStep"
+        @prev="goToPrevStep"
+      />
 
-      <div v-else-if="currentStep === 3" class="flex flex-col gap-6 animate-fade-in bg-gray-50 p-6 rounded-2xl border border-gray-100">
-         <div class="text-center mb-2">
-            <h2 class="text-xl font-extrabold text-gray-800">Available Ambulances</h2>
-            <p class="text-gray-500 text-sm">Searching for nearby hospitals...</p>
-         </div>
-         <div class="flex flex-col gap-3">
-             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm animate-pulse">Scanning nearby area...</div>
-         </div>
-         <div class="flex gap-3 mt-4">
-            <button @click="goToPrevStep" class="flex-1 py-3 text-gray-600 bg-white border border-gray-300 rounded-xl font-bold active:scale-95">Back</button>
-            <button @click="goToNextStep" class="flex-1 py-3 text-white bg-[#CA242A] rounded-xl font-bold active:scale-95">See Results</button>
-         </div>
-      </div>
+      <!-- Step 3: Available Ambulance -->
+      <AvailableAmbulance
+        v-else-if="currentStep === 3"
+        @next="goToNextStep"
+        @prev="goToPrevStep"
+      />
 
-      <div v-else-if="currentStep === 4" class="flex flex-col gap-6 animate-fade-in bg-gray-50 p-6 rounded-2xl border border-gray-100">
-         <div class="text-center mb-2">
-            <h2 class="text-xl font-extrabold text-gray-800">Choose An Ambulance</h2>
-         </div>
-         <div class="flex flex-col gap-3">
-             <div class="bg-white p-4 rounded-lg border-2 border-[#CA242A] shadow-sm flex justify-between items-center cursor-pointer">
-                 <div>
-                     <p class="font-bold">City Hospital Ambulance</p>
-                     <p class="text-xs text-gray-500">2.5 km away • 5 mins</p>
-                 </div>
-                 <span class="text-[#CA242A]">Selected</span>
-             </div>
-             <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex justify-between items-center opacity-60">
-                 <div>
-                     <p class="font-bold">Private Care Unit</p>
-                     <p class="text-xs text-gray-500">4.0 km away • 10 mins</p>
-                 </div>
-             </div>
-         </div>
-         <div class="flex gap-3 mt-4">
-            <button @click="goToPrevStep" class="flex-1 py-3 text-gray-600 bg-white border border-gray-300 rounded-xl font-bold active:scale-95">Back</button>
-            <button @click="goToNextStep" class="flex-1 py-3 text-white bg-[#CA242A] rounded-xl font-bold active:scale-95">Next</button>
-         </div>
-      </div>
+      <!-- Step 4: Choose An Ambulance -->
+      <ChooseAmbulnace
+        v-else-if="currentStep === 4"
+        @next="goToNextStep"
+        @prev="goToPrevStep"
+      />
 
-      <div v-else-if="currentStep === 5" class="flex flex-col gap-6 animate-fade-in bg-[#CA242A] p-6 rounded-2xl text-white shadow-lg text-center items-center justify-center">
-         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-telephone-outbound mb-2" viewBox="0 0 16 16">
-            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5"/>
-         </svg>
-         <h2 class="text-3xl font-extrabold mb-1">Calling...</h2>
-         <p class="text-white/80">Connecting to City Hospital Ambulance</p>
-         <button @click="currentStep = 1" class="mt-6 py-3 px-8 text-[#CA242A] bg-white rounded-xl font-bold active:scale-95">Cancel Call (Reset)</button>
-      </div>
+      <!-- Step 5: Call Ambulance -->
+      <CallAmbulance
+        v-else-if="currentStep === 5"
+        @reset="currentStep = 1"
+      />
 
     </div>
 
